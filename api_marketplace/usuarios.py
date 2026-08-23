@@ -14,11 +14,13 @@ def crear_usuario():
 
     if tipo_usuario == "V":
         print("Perfil vendedor")
+        tipo_usuario = "Vendedor"
         descripcion = input("Ingrese una descripcion de su perfil: ")
         if descripcion == "":
             print("Error: la descripcion es obligatoria")
 
     elif tipo_usuario == "C":
+        tipo_usuario = "Comprador"
         print("Perfil comprador")
         descripcion = ""
     else:
