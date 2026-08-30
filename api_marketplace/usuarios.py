@@ -75,11 +75,12 @@ def consultar_usuarios():
 
 def consultar_usuario_nombre():
     nombre = input("Ingrese el nombre del usuario a consultar: ")
-    usuario = coleccion_usuario.find_one({"nombre": nombre})
-    if usuario:
-        print(usuario)
-    else:
-        print("Usuario no encontrado.")
+    usuarios = coleccion_usuario.find({"nombre": nombre})
+    for usuario in usuarios:
+        if usuario:
+            print(f"Nombre: {usuario['nombre']}, Tipo de usuario: {usuario['tipo_usuario']}, Correo: {usuario['correo']}, Telefono: {usuario['telefono']}, Imagen de perfil: {usuario['imagen_perfil']}, Descripcion: {usuario['descripcion']}")
+        else:
+            print("Usuario no encontrado.")
 
 def eliminar_usuario():
     nombre_usuario = coleccion_usuario.find_one({"nombre": nombre})
