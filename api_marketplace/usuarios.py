@@ -39,6 +39,33 @@ def crear_usuario():
     coleccion_usuario.insert_one(usuario)
     print("Usuario insertado correctamente")
 
+def iniciar_sesion():
+    correo = input("Ingrese su correo: ")
+    contraseña = input("Ingrese su contraseña: ")
+
+    if correo == "" or contraseña == "":
+        print("Error: todos los campos deben ser obligatorios")
+
+    usuario = coleccion_usuario.find_one({"correo": correo, "contraseña": contraseña})
+
+    if usuario:
+        print("Inicio de sesión exitoso")
+        print(f"Bienvenido, {usuario['nombre']}!")
+    else:
+        print("Correo o contraseña incorrectos. Intente nuevamente.")
+        return iniciar_sesion()
+
+
+def cerrar_sesion():
+    opcion = input("Desea cerrar sesión? s/n: ")
+    if opcion == "s":
+        print("Cerrando sesión...")
+        print("Sesión cerrada correctamente.")
+    elif opcion == "n":
+        print("Operación cancelada.")
+    else:
+        print("Opción no válida. Por favor, intente nuevamente.")
+
 def consultar_usuarios():
     filtro = coleccion_usuario.find()
     total_usuarios = coleccion_usuario.count_documents({})
@@ -55,13 +82,25 @@ def consultar_usuario_nombre():
         print("Usuario no encontrado.")
 
 def eliminar_usuario():
-    nombre = input("Ingrese el nombre del usuario a eliminar: ")
-    seguridad = input("¿Está seguro de que desea eliminar este usuario? (s/n): ")
-    if seguridad == "s":
+    nombre_usuario = coleccion_usuario.find_one({"nombre": nombre})
+    tipo_usuario = coleccion_usuario.find_one({"tipo_usuario": "tipo_usuario"})
+
+    if tipo_usuario == "administrador":
+
+        nombre = input("Ingrese el nombre del usuario a eliminar: ")
+        seguridad = input("¿Está seguro de que desea eliminar este usuario? (s/n): ")
+        if seguridad == "s":
+            coleccion_usuario.delete_one({"nombre": nombre})
+            print("Usuario eliminado correctamente.")
+        elif seguridad == "n":
+            print("Operación cancelada.")
+        else:
+            print("Operación no válida.")
+
+
+    elif tipo_usuario != "administrador" and nombre_usuario == nombre_usuario:
         coleccion_usuario.delete_one({"nombre": nombre})
-        print("Usuario eliminado correctamente.")
-    elif seguridad == "n":
-        print("Operación cancelada.")
-    else:
-        print("Operación no válida.")
+        print("Cuenta eliminada correctamente.")
+    elif nombre_usuario != nombre_usuario:
+        print("No puede eliminar cuenta de otro usuario.")
 
