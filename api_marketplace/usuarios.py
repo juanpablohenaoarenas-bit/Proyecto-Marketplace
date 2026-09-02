@@ -105,3 +105,14 @@ def eliminar_usuario():
     elif nombre_usuario != nombre_usuario:
         print("No puede eliminar cuenta de otro usuario.")
 
+# consultas por indice
+def consultar_usuario_combinacion():
+    nombre = input("Ingrese el nombre del usuario a consultar: ")
+    correo = input("Ingrese el correo del usuario a consultar: ")
+    usuarios = coleccion_usuario.find({"nombre": nombre, "correo": correo})
+    for usuario in usuarios:
+        if usuario:
+            print(f"Nombre: {usuario['nombre']}, Tipo de usuario: {usuario['tipo_usuario']}, Correo: {usuario['correo']}, Telefono: {usuario['telefono']}, Imagen de perfil: {usuario['imagen_perfil']}, Descripcion: {usuario['descripcion']}")
+        else:
+            print("Usuario no encontrado.")
+
