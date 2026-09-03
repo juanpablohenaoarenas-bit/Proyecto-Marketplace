@@ -36,12 +36,14 @@ def productos_categoria():
     categoria = input("Ingrese la categoria del producto: ")
     productos = coleccion_producto.find({"categoria": categoria})
     productos.explain()
+    productos.create_index([("categoria_id", 1)])
     for producto in productos:
         print(f"ID: {producto['_id']}, Nombre: {producto['nombre']}, Precio: {producto['precio']}, Stock: {producto['stock']}")
 
 def productos_usuario():
     usuario = input("Ingrese el usuario del producto: ")
     productos = coleccion_producto.find({"usuario": usuario})
+    productos.create_index([("usuario_id", 1)])
     productos.explain()
     for producto in productos:
         print(f"ID: {producto['_id']}, Nombre: {producto['nombre']}, Precio: {producto['precio']}, Stock: {producto['stock']}")
@@ -49,6 +51,7 @@ def productos_usuario():
 def productos_precio():
     precio = float(input("Ingrese el precio del producto: "))
     productos = coleccion_producto.find({"precio": precio})
+    productos.create_index([("precio", 1)])
     productos.explain()
     for producto in productos:
         print(f"ID: {producto['_id']}, Nombre: {producto['nombre']}, Precio: {producto['precio']}, Stock: {producto['stock']}")
@@ -58,6 +61,7 @@ def productos_precio():
 def productos_precio_igualdad():
     precio = float(input("Ingrese el precio del producto: "))
     productos = coleccion_producto.find({"precio": {"$eq": precio}})
+    productos.create_index([("precio", 1)])
     for producto in productos:
         print(f"ID: {producto['_id']}, Nombre: {producto['nombre']}, Precio: {producto['precio']}, Stock: {producto['stock']}")
 
@@ -65,5 +69,6 @@ def productos_precio_rango():
     precio_min = float(input("Ingrese el precio minimo del producto: "))
     precio_max = float(input("Ingrese el precio maximo del producto: "))
     productos = coleccion_producto.find({"precio": {"$gte": precio_min, "$lte": precio_max}})
+    productos.create_index([("precio", 1)])
     for producto in productos:
         print(f"ID: {producto['_id']}, Nombre: {producto['nombre']}, Precio: {producto['precio']}, Stock: {producto['stock']}")
