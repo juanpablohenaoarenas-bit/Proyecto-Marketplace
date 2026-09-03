@@ -8,6 +8,9 @@ def crear_usuario():
     telefono = input("Ingrese su numero de telefono: ")
     imagen_perfil = input("Añade una imagen: ")
 
+    indice_unico = coleccion_usuario.create_index([("correo", 1)], unique=True)
+    print(f"Indice unico creado: {indice_unico}")
+    
     if nombre == "" or tipo_usuario == "" or correo == "" or contraseña == "" or telefono == "" or imagen_perfil == "":
         print("Error: todos los campos deben ser obligatorios y validos")
         return

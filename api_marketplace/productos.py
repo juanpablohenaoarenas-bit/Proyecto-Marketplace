@@ -28,40 +28,44 @@ def crear_producto():
 
 def productos_disponibles():
     stock = coleccion_producto.find({"stock": {"$gt": 0}})
-    stock.explain()
+    indice_compuesto = coleccion_producto.create_index([("stock", 1), ("precio", 1)])
     for producto in stock:
         print(f"ID: {producto['_id']}, Nombre: {producto['nombre']}, Precio: {producto['precio']}, Stock: {producto['stock']}")
+    print(f"Indice compuesto creado: {indice_compuesto}")
 
 def productos_categoria():
     categoria = input("Ingrese la categoria del producto: ")
     productos = coleccion_producto.find({"categoria": categoria})
-    productos.explain()
-    productos.create_index([("categoria_id", 1)])
+    explicacion = productos.explain()
+    indice = coleccion_producto.create_index([("categoria", 1)])
     for producto in productos:
         print(f"ID: {producto['_id']}, Nombre: {producto['nombre']}, Precio: {producto['precio']}, Stock: {producto['stock']}")
+    print(explicacion)
+    print(f"Indice creado: {indice}")
 
 def productos_usuario():
     usuario = input("Ingrese el usuario del producto: ")
     productos = coleccion_producto.find({"usuario": usuario})
-    productos.create_index([("usuario_id", 1)])
-    productos.explain()
+    explicacion = productos.explain()
+    indice = coleccion_producto.create_index([("usuario", 1)])
     for producto in productos:
         print(f"ID: {producto['_id']}, Nombre: {producto['nombre']}, Precio: {producto['precio']}, Stock: {producto['stock']}")
+    print(explicacion)
+    print(f"Indice creado: {indice}")
 
 def productos_precio():
     precio = float(input("Ingrese el precio del producto: "))
     productos = coleccion_producto.find({"precio": precio})
-    productos.create_index([("precio", 1)])
-    productos.explain()
+    explicacion = productos.explain()
     for producto in productos:
         print(f"ID: {producto['_id']}, Nombre: {producto['nombre']}, Precio: {producto['precio']}, Stock: {producto['stock']}")
+    print(explicacion)
 
 
 # consultas por indice 
 def productos_precio_igualdad():
     precio = float(input("Ingrese el precio del producto: "))
     productos = coleccion_producto.find({"precio": {"$eq": precio}})
-    productos.create_index([("precio", 1)])
     for producto in productos:
         print(f"ID: {producto['_id']}, Nombre: {producto['nombre']}, Precio: {producto['precio']}, Stock: {producto['stock']}")
 
@@ -69,6 +73,5 @@ def productos_precio_rango():
     precio_min = float(input("Ingrese el precio minimo del producto: "))
     precio_max = float(input("Ingrese el precio maximo del producto: "))
     productos = coleccion_producto.find({"precio": {"$gte": precio_min, "$lte": precio_max}})
-    productos.create_index([("precio", 1)])
     for producto in productos:
         print(f"ID: {producto['_id']}, Nombre: {producto['nombre']}, Precio: {producto['precio']}, Stock: {producto['stock']}")
