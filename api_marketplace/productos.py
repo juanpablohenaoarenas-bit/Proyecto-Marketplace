@@ -75,3 +75,45 @@ def productos_precio_rango():
     productos = coleccion_producto.find({"precio": {"$gte": precio_min, "$lte": precio_max}})
     for producto in productos:
         print(f"ID: {producto['_id']}, Nombre: {producto['nombre']}, Precio: {producto['precio']}, Stock: {producto['stock']}")
+
+#consulta de estadistica sencilla
+def cantidad_productos_por_categoria():
+    categoria = input("Ingrese la categoria del producto: ")
+    piline = coleccion_producto.aggregate([
+        {"$match": {"categoria": categoria}},
+        {"$group": {"_id": "$categoria", "cantidad": {"$sum": 1}}}
+    ])
+    for resultado in piline:
+        print(f"Cantidad de productos en la categoria {categoria}: {resultado['cantidad']}")
+
+
+#consulta de metrica
+def promedio_precio_por_categoria():
+    categoria = input("Ingrese la categoria del producto: ")
+    pipeline = coleccion_producto.aggregate([
+        {"$match": {"categoria": categoria}},
+        {"$group": {"_id": "$categoria", "promedio_precio": {"$avg": "$precio"}}}
+    ])
+    for resultado in pipeline:
+        print(f"Promedio de precio de productos en la categoria {categoria}: {resultado['promedio_precio']}")
+
+#Consulta de ranking
+def ordenar_productos_por_stock():
+    pipeline = coleccion_producto.aggregate([
+        {"$sort": {"stock": -1}}
+    ])
+    for producto in pipeline:
+        print(f"ID: {producto['_id']}, Nombre: {producto['nombre']}, Precio: {producto['precio']}, Stock: {producto['stock']}")
+
+#Consulta con varias etapas(4: match, group, sort, limit)
+def productos_categoria_precio():
+    categoria = input("Ingrese la categoria del producto: ")
+    precio_max = float(input("Ingrese el precio maximo del producto: "))
+    pipeline = coleccion_producto.aggregate([
+        {"$match": {"categoria": categoria, "precio": {"$lte": precio_max}}},
+        {"$group": {"_id": "$categoria", "productos": {"$push": "$nombre"}}},
+        {"$sort": {"_id": 1}},
+        {"$limit": 5}
+    ])
+    for resultado in pipeline:
+        print(f"Productos en la categoria {categoria} con precio menor o igual a {precio_max}: {resultado['productos']}")
