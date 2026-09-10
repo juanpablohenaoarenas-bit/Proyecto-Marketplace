@@ -38,9 +38,11 @@ def crear_usuario():
         "imagen_perfil": imagen_perfil,
         "descripcion": descripcion
     }
-
-    coleccion_usuario.insert_one(usuario)
-    print("Usuario insertado correctamente")
+    try:
+        coleccion_usuario.insert_one(usuario)
+        print("Usuario insertado correctamente")
+    except Exception as e:
+        print(f"Error al insertar usuario: {e}")
 
 def iniciar_sesion():
     correo = input("Ingrese su correo: ")
